@@ -58,9 +58,40 @@ struct LiveActivitiesTestWidget: Widget {
     let kind: String = "LiveActivitiesTestWidget"
 
     var body: some WidgetConfiguration {
-        ActivityConfiguration(attributesType: TripAppAttributes.self) { context in
+        ActivityConfiguration(for: TripAppAttributes.self) { context in
             LiveActivitiesTestWidgetEntryView(attribute: context.attributes,
                                               state: context.state)
+        } dynamicIsland: { context in
+            DynamicIsland {
+                DynamicIslandExpandedRegion(.leading) {
+                    Text("🚀")
+                }
+                DynamicIslandExpandedRegion(.trailing) {
+                    Text(context.state.arrivalTime, style: .timer)
+                        .font(.caption2)
+                }
+                DynamicIslandExpandedRegion(.center) {
+                    Text("次の目的地は\(context.state.userStopPlanetName)です。")
+                }
+                DynamicIslandExpandedRegion(.bottom) {
+                    Button("宇宙機アクセスバッジ") {
+                        return
+                    }.buttonStyle(.borderedProminent)
+                }
+            } compactLeading: {
+                Text("🚀 - \(context.attributes.shipNumber)")
+            } compactTrailing: {
+                Text(context.state.arrivalTime, style: .relative)
+                    .frame(width: 50)
+                    .monospacedDigit()
+                    .font(.caption2)
+            } minimal: {
+                ViewThatFits {
+                    Text("🚀")
+                    Text("context.state.arrivalTime, style: .relative")
+                }
+            }
         }
     }
 }
+

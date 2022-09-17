@@ -27,11 +27,11 @@ struct ContentView: View {
             }
             
             Button("Create live activity") {
-                let attributes = TripAppAttributes(shipNumber: "Space Warp 2",
+                let attributes = TripAppAttributes(shipNumber: "火星へ",
                                                    departureTime: Calendar.current.date(byAdding: .minute, value: -2,
                                                                                         to: Date()) ?? Date())
                 let contentState = TripAppAttributes.ContentState(tripStatus: TripAppAttributes.TripStatus.inflight.rawValue,
-                                                                  userStopPlanetName: "M51 galaxy",
+                                                                  userStopPlanetName: "火星",
                                                                   userCabinNumber: "A12",
                                                                   arrivalTime: Calendar.current.date(byAdding: .minute, value: 8, to: Date()) ?? Date())
                 do {
@@ -47,14 +47,15 @@ struct ContentView: View {
             Button("Get on-going activity") {
                 let activities = Activity<TripAppAttributes>.activities
                 self.currentActivity = activities.first
+                
             }
             
             Button("Trip arrival time +10 minutes") {
                 Task {
                     guard let currentActivity else { return }
                     let updatedState = TripAppAttributes.ContentState(tripStatus: TripAppAttributes.TripStatus.inflight.rawValue,
-                                                                      userStopPlanetName: "M51 galaxy",
-                                                                      userCabinNumber: "A12",
+                                                                      userStopPlanetName: "火星",
+                                                                      userCabinNumber: "火星へ",
                                                                       arrivalTime: Calendar.current.date(byAdding: .minute, value: 10, to: currentActivity.contentState.arrivalTime) ?? Date())
                     await currentActivity.update(using: updatedState)
                 }
@@ -64,7 +65,7 @@ struct ContentView: View {
                 Task {
                     guard let currentActivity else { return }
                     let updatedState = TripAppAttributes.ContentState(tripStatus: TripAppAttributes.TripStatus.landed.rawValue,
-                                                                      userStopPlanetName: "M51 galaxy",
+                                                                      userStopPlanetName: "火星",
                                                                       userCabinNumber: "A12",
                                                                       arrivalTime: currentActivity.contentState.arrivalTime)
                     await currentActivity.end(using: updatedState, dismissalPolicy: .default)
@@ -82,3 +83,7 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
+
+
